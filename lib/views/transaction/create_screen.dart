@@ -1,4 +1,5 @@
 import 'package:app_fiman/blocs/create/create_bloc.dart';
+import 'package:app_fiman/blocs/history/history_bloc.dart';
 import 'package:app_fiman/models/transaction_model.dart';
 import 'package:app_fiman/utils/componen/text_field.dart';
 import 'package:app_fiman/utils/constants/contant.dart';
@@ -21,6 +22,7 @@ class _CreateScreenState extends State<CreateScreen> {
   final tanggalController = TextEditingController();
   final keteranganController = TextEditingController();
   DateTime selectedDate = DateTime.now();
+  DateTime CurrentDate = DateTime.now();
   final Validator validator = Validator();
   final _formKey = GlobalKey<FormState>();
 
@@ -43,10 +45,11 @@ class _CreateScreenState extends State<CreateScreen> {
   void _showDatePicker() async {
     final date = await showDatePicker(
         context: context,
-        initialDate: selectedDate,
+        initialDate: CurrentDate,
         firstDate: DateTime(2000),
         lastDate: DateTime(2100));
     if (date == null) return;
+    selectedDate = date;
     tanggalController.text =
         DateFormat('EEEE, d MMMM yyyy', "id_ID").format(date);
   }
@@ -73,6 +76,9 @@ class _CreateScreenState extends State<CreateScreen> {
         kategoriController.clear();
         tanggalController.clear();
         keteranganController.clear();
+        context
+            .read<HistoryBloc>()
+            .add(HistoryFetchEvent(loadMore: false, search: ""));
         Navigator.pop(context);
       }
     }
@@ -98,7 +104,7 @@ class _CreateScreenState extends State<CreateScreen> {
             ),
           ),
           child: SafeArea(
-            minimum: EdgeInsets.all(15),
+            minimum: const EdgeInsets.all(15),
             child: SingleChildScrollView(
               child: Form(
                 key: _formKey,
@@ -237,32 +243,38 @@ class _CreateScreenState extends State<CreateScreen> {
                       ],
                     ),
                     const SizedBox(height: 20),
-                    myTextField(
-                        namaTransaksiController,
-                        "Nama Transaksi",
-                        validator.nameValidator,
-                        TextInputType.text,
-                        () {},
-                        false),
+                    MyTextField(
+                        controller: namaTransaksiController,
+                        label: "Nama Transaksi",
+                        vlidator: validator.nameValidator,
+                        keyboardType: TextInputType.text,
+                        onTap: () {},
+                        isReadOnly: false),
                     const SizedBox(height: 20),
-                    myTextField(
-                        jumlahController,
-                        "Jumlah",
-                        validator.jumlahValidator,
-                        TextInputType.number,
-                        () {},
-                        false),
+                    MyTextField(
+                        controller: jumlahController,
+                        label: "Jumlah",
+                        vlidator: validator.jumlahValidator,
+                        keyboardType: TextInputType.number,
+                        onTap: () {},
+                        isReadOnly: false),
                     const SizedBox(height: 20),
-                    myTextField(
-                        tanggalController,
-                        "Tanggal",
-                        validator.tanggalValidator,
-                        TextInputType.text,
-                        _showDatePicker,
-                        true),
+                    MyTextField(
+                        controller: tanggalController,
+                        label: "Tanggal",
+                        vlidator: validator.tanggalValidator,
+                        keyboardType: TextInputType.text,
+                        onTap: _showDatePicker,
+                        isReadOnly: true),
                     const SizedBox(height: 20),
-                    myTextField(keteranganController, "Keterangan", (p) {},
-                        TextInputType.text, () {}, false),
+                    MyTextField(
+                      controller: keteranganController,
+                      label: "Keterangan",
+                      vlidator: (p) {},
+                      keyboardType: TextInputType.text,
+                      onTap: () {},
+                      isReadOnly: false,
+                    ),
                     const SizedBox(height: 20),
                     ElevatedButton(
                       style: ButtonStyle(
