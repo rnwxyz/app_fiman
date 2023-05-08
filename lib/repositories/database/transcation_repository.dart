@@ -1,4 +1,5 @@
 import 'package:app_fiman/models/transaction_model.dart';
+import 'package:app_fiman/utils/constants/contant.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -46,10 +47,35 @@ class TransactionRepository {
     return result;
   }
 
-  Future<List<TransactionModel>> getTransactions() async {
+  Future<List<TransactionModel>> getTransactions(
+    int offset,
+    String search,
+    String sort,
+    int categoryId,
+  ) async {
     final Database db = await database;
-    List<Map<String, dynamic>> results =
-        await db.query(_tableName, orderBy: 'id DESC');
+    const limit = 10;
+    String condition = 'name LIKE ?';
+    List<String> args = ['%$search%'];
+    String orderBy = 'id DESC';
+
+    if (categoryId != 0) {
+      condition += ' AND category = ?';
+      args.add(categoryId.toString());
+    }
+
+    if (sort != '') {
+      orderBy = 'date $sort';
+    }
+
+    List<Map<String, dynamic>> results = await db.query(
+      _tableName,
+      orderBy: orderBy,
+      limit: limit,
+      offset: offset * limit,
+      where: condition,
+      whereArgs: args,
+    );
     return results.map((e) => TransactionModel.fromMap(e)).toList();
   }
 

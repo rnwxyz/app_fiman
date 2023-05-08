@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart';
 
 const primary = Color(0xFF52A1A4);
-const secondary = Color(0xFFE5E5E5);
+const secondary = Color(0xFFf1f4f3);
 const accent = Color(0xFF9E9E9E);
 const white = Color(0xFFFFFFFF);
 const black = Color(0xFF000000);
@@ -23,7 +23,12 @@ const headline2 = TextStyle(
 );
 const headline3 = TextStyle(
   fontSize: 18,
-  fontWeight: FontWeight.w700,
+  fontWeight: FontWeight.w200,
+  color: black,
+);
+const headline4 = TextStyle(
+  fontSize: 18,
+  fontWeight: FontWeight.w200,
   color: white,
 );
 const subtitle1 = TextStyle(
