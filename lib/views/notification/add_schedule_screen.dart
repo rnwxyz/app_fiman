@@ -1,56 +1,39 @@
-import 'package:app_fiman/blocs/create/create_bloc.dart';
-import 'package:app_fiman/blocs/history/history_bloc.dart';
-import 'package:app_fiman/models/transaction_model.dart';
-import 'package:app_fiman/utils/componen/text_field.dart';
-import 'package:app_fiman/utils/constants/contant.dart';
-import 'package:app_fiman/utils/validator/validator.dart';
+import 'package:app_fiman/blocs/schedule/schedule_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:intl/intl.dart';
 
-class CreateScreen extends StatefulWidget {
-  const CreateScreen({super.key});
+import '../../blocs/create/create_bloc.dart';
+import '../../blocs/notification/notification_bloc.dart';
+import '../../models/schedule_model.dart';
+import '../../utils/componen/text_field.dart';
+import '../../utils/constants/contant.dart';
+import '../../utils/validator/validator.dart';
+
+class AddScheduleScreen extends StatefulWidget {
+  const AddScheduleScreen({super.key});
+
   @override
-  State<CreateScreen> createState() => _CreateScreenState();
+  State<AddScheduleScreen> createState() => _AddScheduleScreenState();
 }
 
-class _CreateScreenState extends State<CreateScreen> {
+class _AddScheduleScreenState extends State<AddScheduleScreen> {
   final namaTransaksiController = TextEditingController();
   final jumlahController = TextEditingController();
   final kategoriController = TextEditingController();
   final tanggalController = TextEditingController();
   final keteranganController = TextEditingController();
   DateTime selectedDate = DateTime.now();
-  DateTime currentDate = DateTime.now();
   final Validator validator = Validator();
   final _formKey = GlobalKey<FormState>();
-
-  @override
-  void dispose() {
-    namaTransaksiController.dispose();
-    jumlahController.dispose();
-    kategoriController.dispose();
-    tanggalController.dispose();
-    keteranganController.dispose();
-    super.dispose();
-  }
+  int? day;
+  int? month;
+  int? year;
 
   @override
   void initState() {
     context.read<CreateBloc>().add(CreateInitialEvent());
     super.initState();
-  }
-
-  void _showDatePicker() async {
-    final date = await showDatePicker(
-        context: context,
-        initialDate: currentDate,
-        firstDate: DateTime(2000),
-        lastDate: DateTime(2100));
-    if (date == null) return;
-    selectedDate = date;
-    tanggalController.text =
-        DateFormat('EEEE, d MMMM yyyy', "id_ID").format(date);
   }
 
   void _formSubmit() {
@@ -62,22 +45,24 @@ class _CreateScreenState extends State<CreateScreen> {
           ),
         );
       } else {
-        final data = TransactionModel(
+        final data = ScheduleModel(
           name: namaTransaksiController.text,
           amount: int.parse(jumlahController.text),
           category: int.parse(kategoriController.text),
-          date: DateTime.parse(DateFormat("yyyy-MM-dd").format(selectedDate)),
           description: keteranganController.text,
+          day: day,
+          month: month,
+          year: year,
+          isNotifed: false,
         );
-        context.read<CreateBloc>().add(CreateSubmitEvent(data));
+        context.read<CreateBloc>().add(CreateSchedule(data));
         namaTransaksiController.clear();
         jumlahController.clear();
         kategoriController.clear();
         tanggalController.clear();
         keteranganController.clear();
-        context
-            .read<HistoryBloc>()
-            .add(HistoryFetchEvent(loadMore: false, search: ""));
+        context.read<ScheduleBloc>().add(ScheduleFeatch());
+        context.read<NotificationBloc>().add(NotificationFeatch());
         Navigator.pop(context);
       }
     }
@@ -87,34 +72,27 @@ class _CreateScreenState extends State<CreateScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Tambah Transaksi"),
-        centerTitle: true,
-        backgroundColor: primary,
+        title: const Text("Tambah Jadwal", style: headline2),
+        backgroundColor: Colors.transparent,
+        iconTheme: const IconThemeData(
+          color: black,
+        ),
         elevation: 0,
       ),
-      body: Container(
-        color: primary,
-        child: Container(
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(30),
-              topRight: Radius.circular(30),
-            ),
-          ),
-          child: SafeArea(
-            minimum: const EdgeInsets.all(15),
-            child: SingleChildScrollView(
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Center(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 15),
               child: Form(
                 key: _formKey,
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      'Lengkapin ya bre !',
-                      style: headline2,
+                    Image.asset(
+                      "assets/notif.png",
+                      width: 300,
+                      height: 150,
                     ),
-                    const SizedBox(height: 50),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
@@ -259,20 +237,79 @@ class _CreateScreenState extends State<CreateScreen> {
                         isReadOnly: false),
                     const SizedBox(height: 20),
                     MyTextField(
-                        controller: tanggalController,
-                        label: "Tanggal",
-                        vlidator: validator.tanggalValidator,
-                        keyboardType: TextInputType.text,
-                        onTap: _showDatePicker,
-                        isReadOnly: true),
-                    const SizedBox(height: 20),
-                    MyTextField(
                       controller: keteranganController,
                       label: "Keterangan",
                       vlidator: (p) {},
                       keyboardType: TextInputType.text,
                       onTap: () {},
                       isReadOnly: false,
+                    ),
+                    const SizedBox(height: 20),
+                    const Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text('Atur Jadwal Tiap...', style: headline3)),
+                    const SizedBox(height: 20),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        SizedBox(
+                          width: 100,
+                          child: TextField(
+                            inputFormatters: [
+                              FilteringTextInputFormatter.digitsOnly
+                            ],
+                            onChanged: (value) {
+                              if (value.isNotEmpty) {
+                                day = int.parse(value);
+                              } else {
+                                day = null;
+                              }
+                            },
+                            keyboardType: TextInputType.number,
+                            decoration: const InputDecoration(
+                              hintText: 'Tanggal',
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 100,
+                          child: TextField(
+                            inputFormatters: [
+                              FilteringTextInputFormatter.digitsOnly
+                            ],
+                            onChanged: (value) {
+                              if (value.isNotEmpty) {
+                                month = int.parse(value);
+                              } else {
+                                month = null;
+                              }
+                            },
+                            keyboardType: TextInputType.number,
+                            decoration: const InputDecoration(
+                              hintText: 'Bulan',
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: 100,
+                          child: TextField(
+                            inputFormatters: [
+                              FilteringTextInputFormatter.digitsOnly
+                            ],
+                            onChanged: (value) {
+                              if (value.isNotEmpty) {
+                                year = int.parse(value);
+                              } else {
+                                year = null;
+                              }
+                            },
+                            keyboardType: TextInputType.number,
+                            decoration: const InputDecoration(
+                              hintText: 'Tahun',
+                            ),
+                          ),
+                        )
+                      ],
                     ),
                     const SizedBox(height: 20),
                     ElevatedButton(
@@ -295,13 +332,13 @@ class _CreateScreenState extends State<CreateScreen> {
                           if (state is CreateError) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
-                                content: Text('Gagal menambahkan transaksi'),
+                                content: Text('Gagal menambahkan jadwal'),
                               ),
                             );
                           } else if (state is CreateSuccess) {
                             ScaffoldMessenger.of(context).showSnackBar(
                               const SnackBar(
-                                content: Text('Berhasil menambahkan transaksi'),
+                                content: Text('Berhasil menambahkan jadwal'),
                               ),
                             );
                           }
@@ -313,7 +350,7 @@ class _CreateScreenState extends State<CreateScreen> {
                             );
                           } else {
                             return const Text(
-                              'Tambah',
+                              'JADWALKAN',
                               style: button,
                             );
                           }
