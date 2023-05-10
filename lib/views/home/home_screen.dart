@@ -2,8 +2,11 @@ import 'package:app_fiman/utils/constants/contant.dart';
 import 'package:app_fiman/views/auth/start_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 
 import '../../blocs/auth/auth_bloc.dart';
+import '../../blocs/news/news_bloc.dart';
+import '../../models/news_model.dart';
 import '../../utils/componen/navigation_bar.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -14,6 +17,26 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  List<NewsModel> news = [];
+  final ScrollController scrollController = ScrollController();
+  final TextEditingController searchController = TextEditingController();
+
+  @override
+  void initState() {
+    scrollController.addListener(
+      () {
+        if (scrollController.position.pixels ==
+            scrollController.position.maxScrollExtent) {
+          context
+              .read<NewsBloc>()
+              .add(NewsFetch(loadMore: true, q: searchController.text));
+        }
+      },
+    );
+    context.read<NewsBloc>().add(NewsFetch(q: '', loadMore: false));
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -79,40 +102,126 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
               const SizedBox(height: 20),
-              const Text('Berita Terkini', style: headline2),
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: Align(
+                  alignment: Alignment.centerLeft,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const SizedBox(
+                        width: 200,
+                        child: Text('Berita terkini', style: headline2),
+                      ),
+                      SizedBox(
+                        width: 120,
+                        child: TextFormField(
+                          controller: searchController,
+                          decoration: const InputDecoration(
+                            suffixIcon: Icon(Icons.search),
+                          ),
+                          onFieldSubmitted: (value) {
+                            context
+                                .read<NewsBloc>()
+                                .add(NewsFetch(q: value, loadMore: false));
+                          },
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              ),
+              const Divider(),
               Expanded(
                 child: Container(
-                  decoration: BoxDecoration(
+                  decoration: const BoxDecoration(
                     borderRadius: BorderRadius.vertical(
                       top: Radius.circular(20),
                     ),
                   ),
-                  child: ListView.builder(
-                    itemCount: 10,
-                    itemBuilder: (context, index) {
-                      return Card(
-                        margin: const EdgeInsets.symmetric(
-                            horizontal: 10, vertical: 4),
-                        child: ListTile(
-                          minLeadingWidth: 1,
-                          title: Align(
-                            alignment: Alignment.centerLeft,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text("Test",
-                                    style: const TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.bold,
-                                    )),
-                                const SizedBox(height: 10),
-                                Text("Test"),
-                                const SizedBox(height: 10),
-                              ],
-                            ),
+                  child: BlocConsumer<NewsBloc, NewsState>(
+                    listener: (context, state) {
+                      if (state is NewsLoaded) {
+                        news = state.news;
+                      }
+                      if (state is NewsError) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text(state.message),
                           ),
-                        ),
-                      );
+                        );
+                      }
+                    },
+                    builder: (context, state) {
+                      if (state is NewsInitial) {
+                        return const Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      } else {
+                        return ListView.builder(
+                          controller: scrollController,
+                          itemCount: state is NewsLoading
+                              ? news.length + 1
+                              : news.length,
+                          itemBuilder: (context, index) {
+                            if (index == news.length) {
+                              return const Center(
+                                  child: CircularProgressIndicator());
+                            } else {
+                              final String title = news[index].title;
+                              final String publishedAt =
+                                  DateFormat('EEEE, dd MMMM yyyy', 'id_ID')
+                                      .format(news[index].publishedAt);
+                              final String author = news[index].author;
+                              final String imgUrl = news[index].urlToImage;
+                              final String url = news[index].url;
+                              Widget image = Icon(Icons.image_not_supported);
+
+                              if (imgUrl != '') {
+                                image = Image.network(
+                                  imgUrl,
+                                  fit: BoxFit.cover,
+                                );
+                              }
+
+                              return Padding(
+                                padding: const EdgeInsets.only(
+                                    bottom: 4, right: 8, left: 8),
+                                child: Column(
+                                  children: [
+                                    ListTile(
+                                      title: Padding(
+                                        padding:
+                                            const EdgeInsets.only(bottom: 8),
+                                        child: Text(
+                                          title,
+                                          maxLines: 3,
+                                        ),
+                                      ),
+                                      onTap: () {
+                                        context
+                                            .read<NewsBloc>()
+                                            .add(NewsRedirect(url));
+                                      },
+                                      style: ListTileStyle.drawer,
+                                      subtitle: Text('$publishedAt\n$author'),
+                                      trailing: SizedBox(
+                                        height: 150,
+                                        width: 100,
+                                        child: ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(1),
+                                            child: image),
+                                      ),
+                                    ),
+                                    const Divider(),
+                                  ],
+                                ),
+                              );
+                            }
+                          },
+                        );
+                      }
                     },
                   ),
                 ),

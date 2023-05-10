@@ -14,10 +14,11 @@ class HistoryBloc extends Bloc<HistoryEvent, HistoryState> {
     on<HistoryFetchEvent>(
       (event, emit) async {
         try {
-          emit(HistoryLoading());
           if (event.loadMore) {
+            emit(HistoryLoading());
             offset++;
           } else {
+            emit(HistoryInitial());
             offset = 0;
             transactionData = [];
           }
