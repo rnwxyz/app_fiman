@@ -11,6 +11,12 @@ class CreateSubmitEvent extends CreateEvent {
   CreateSubmitEvent(this.transactionModel);
 }
 
+class CreateSchedule extends CreateEvent {
+  final ScheduleModel schedule;
+
+  CreateSchedule(this.schedule);
+}
+
 class CreateCategoryPemasukanSelectedEvent extends CreateEvent {}
 
 class CreateCategoryPengeluaranSelectedEvent extends CreateEvent {}

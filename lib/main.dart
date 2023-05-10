@@ -9,6 +9,9 @@ import 'package:intl/date_symbol_data_local.dart';
 
 import 'blocs/history_filter/history_filter_bloc.dart';
 import 'blocs/news/news_bloc.dart';
+import 'blocs/notification/notification_bloc.dart';
+import 'blocs/notification_screen/notification_screen_bloc.dart';
+import 'blocs/schedule/schedule_bloc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -42,6 +45,15 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => NewsBloc(),
+        ),
+        BlocProvider(
+          create: (context) => ScheduleBloc(),
+        ),
+        BlocProvider(
+          create: (context) => NotificationBloc(),
+        ),
+        BlocProvider(
+          create: (context) => NotificationScreenBloc(),
         ),
       ],
       child: const MaterialApp(

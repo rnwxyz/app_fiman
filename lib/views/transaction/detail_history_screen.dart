@@ -63,7 +63,7 @@ class _DetailHistoryScreenState extends State<DetailHistoryScreen> {
         title: const Text("Detail", style: headline2),
         backgroundColor: Colors.transparent,
         iconTheme: const IconThemeData(
-          color: black, // Set the color of the back arrow icon here
+          color: black,
         ),
         elevation: 0,
       ),
