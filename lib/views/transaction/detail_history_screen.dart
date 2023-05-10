@@ -1,13 +1,9 @@
-import 'dart:io';
-
 import 'package:app_fiman/models/transaction_model.dart';
-import 'package:app_fiman/utils/componen/navigation_bar.dart';
 import 'package:app_fiman/utils/constants/contant.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 
-import '../../blocs/history/history_bloc.dart';
 import '../../blocs/history_filter/history_filter_bloc.dart';
 
 class DetailHistoryScreen extends StatefulWidget {
@@ -92,14 +88,14 @@ class _DetailHistoryScreenState extends State<DetailHistoryScreen> {
                         leading: leading,
                         title: Text(
                           data.name,
-                          style: TextStyle(
+                          style: const TextStyle(
                               fontSize: 28,
                               fontWeight: FontWeight.bold,
                               color: black),
                         ),
                         subtitle: Text(
                           defirenceText,
-                          style: TextStyle(
+                          style: const TextStyle(
                               fontSize: 20,
                               fontWeight: FontWeight.w300,
                               color: primary),
@@ -111,7 +107,7 @@ class _DetailHistoryScreenState extends State<DetailHistoryScreen> {
                       const SizedBox(height: 10),
                       Text(
                         nilai,
-                        style: TextStyle(
+                        style: const TextStyle(
                           fontSize: 30,
                           fontWeight: FontWeight.w500,
                           color: primary,
@@ -143,7 +139,7 @@ class _DetailHistoryScreenState extends State<DetailHistoryScreen> {
                                 Text(
                                   DateFormat('EEEE, dd MMMM yyyy', 'id_ID')
                                       .format(data.date),
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.w300,
                                       color: black),
@@ -155,7 +151,7 @@ class _DetailHistoryScreenState extends State<DetailHistoryScreen> {
                                   initialValue: data.description,
                                   readOnly: true,
                                   maxLines: 5,
-                                  style: TextStyle(
+                                  style: const TextStyle(
                                       fontSize: 20,
                                       fontWeight: FontWeight.w200,
                                       color: black),

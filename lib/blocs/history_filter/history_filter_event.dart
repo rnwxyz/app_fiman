@@ -1,6 +1,5 @@
 part of 'history_filter_bloc.dart';
 
-@immutable
 abstract class HistoryFilterEvent {}
 
 class HistoryFilterInitialEvent extends HistoryFilterEvent {}

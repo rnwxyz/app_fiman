@@ -1,7 +1,6 @@
 import 'package:app_fiman/utils/constants/contant.dart';
 import 'package:bloc/bloc.dart';
 import 'package:flutter/services.dart';
-import 'package:meta/meta.dart';
 
 part 'notification_screen_event.dart';
 part 'notification_screen_state.dart';

@@ -1,7 +1,6 @@
 import 'package:app_fiman/repositories/api/news_repository.dart';
 import 'package:app_fiman/utils/constants/contant.dart';
 import 'package:bloc/bloc.dart';
-import 'package:meta/meta.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../models/news_model.dart';

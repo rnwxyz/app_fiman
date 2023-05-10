@@ -1,6 +1,5 @@
 part of 'history_filter_bloc.dart';
 
-@immutable
 abstract class HistoryFilterState {}
 
 class HistoryFilterInitial extends HistoryFilterState {}

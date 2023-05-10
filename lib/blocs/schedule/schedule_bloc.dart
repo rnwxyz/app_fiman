@@ -1,6 +1,5 @@
 import 'package:app_fiman/repositories/database/schedule_repository.dart';
 import 'package:bloc/bloc.dart';
-import 'package:meta/meta.dart';
 
 import '../../models/schedule_model.dart';
 

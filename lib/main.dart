@@ -11,6 +11,7 @@ import 'blocs/history_filter/history_filter_bloc.dart';
 import 'blocs/news/news_bloc.dart';
 import 'blocs/notification/notification_bloc.dart';
 import 'blocs/notification_screen/notification_screen_bloc.dart';
+import 'blocs/resume/resume_bloc.dart';
 import 'blocs/schedule/schedule_bloc.dart';
 
 void main() async {
@@ -54,6 +55,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => NotificationScreenBloc(),
+        ),
+        BlocProvider(
+          create: (context) => ResumeBloc(),
         ),
       ],
       child: const MaterialApp(

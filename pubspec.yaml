@@ -44,6 +44,7 @@ dependencies:
   intl: ^0.18.0
   dio: ^5.1.1
   url_launcher: ^6.1.11
+  syncfusion_flutter_charts: ^21.1.41
 
 # Splash Screen
 flutter_native_splash:

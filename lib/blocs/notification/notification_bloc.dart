@@ -1,5 +1,4 @@
 import 'package:bloc/bloc.dart';
-import 'package:meta/meta.dart';
 
 import '../../models/schedule_model.dart';
 import '../../repositories/database/schedule_repository.dart';

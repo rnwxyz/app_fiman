@@ -1,5 +1,4 @@
 import 'package:bloc/bloc.dart';
-import 'package:meta/meta.dart';
 
 part 'history_filter_event.dart';
 part 'history_filter_state.dart';

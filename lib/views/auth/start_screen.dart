@@ -27,7 +27,7 @@ class _StartScreenState extends State<StartScreen> {
         } else if (state is AuthSuccess) {
           return const HomeScreen();
         } else {
-          return Scaffold(
+          return const Scaffold(
             body: Center(
               child: CircularProgressIndicator(),
             ),

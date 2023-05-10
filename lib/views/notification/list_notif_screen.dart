@@ -1,5 +1,4 @@
 import 'package:app_fiman/blocs/create/create_bloc.dart';
-import 'package:app_fiman/blocs/schedule/schedule_bloc.dart';
 import 'package:app_fiman/models/schedule_model.dart';
 import 'package:app_fiman/models/transaction_model.dart';
 import 'package:flutter/material.dart';
@@ -173,7 +172,7 @@ class _ListNotifScreenState extends State<ListNotifScreen> {
                       'KETERANGAN: ${state.schedules[index].description ?? ''}',
                       maxLines: 3,
                     ),
-                    trailing: Icon(
+                    trailing: const Icon(
                       Icons.notifications,
                       color: primary,
                       size: 40,
