@@ -107,7 +107,7 @@ class _AddScheduleScreenState extends State<AddScheduleScreen> {
                                       MaterialStateProperty.all(white),
                                   // add border color
                                   side: MaterialStateProperty.all(
-                                    BorderSide(color: success, width: 1),
+                                    const BorderSide(color: success, width: 1),
                                   ),
                                   shape: MaterialStateProperty.all(
                                     RoundedRectangleBorder(
@@ -135,7 +135,7 @@ class _AddScheduleScreenState extends State<AddScheduleScreen> {
                                       MaterialStateProperty.all(black),
                                   // add border color
                                   side: MaterialStateProperty.all(
-                                    BorderSide(color: accent, width: 1),
+                                    const BorderSide(color: accent, width: 1),
                                   ),
                                   shape: MaterialStateProperty.all(
                                     RoundedRectangleBorder(
@@ -168,7 +168,7 @@ class _AddScheduleScreenState extends State<AddScheduleScreen> {
                                       MaterialStateProperty.all(white),
                                   // add border color
                                   side: MaterialStateProperty.all(
-                                    BorderSide(color: danger, width: 1),
+                                    const BorderSide(color: danger, width: 1),
                                   ),
                                   shape: MaterialStateProperty.all(
                                     RoundedRectangleBorder(
@@ -196,7 +196,7 @@ class _AddScheduleScreenState extends State<AddScheduleScreen> {
                                       MaterialStateProperty.all(black),
                                   // add border color
                                   side: MaterialStateProperty.all(
-                                    BorderSide(color: accent, width: 1),
+                                    const BorderSide(color: accent, width: 1),
                                   ),
                                   shape: MaterialStateProperty.all(
                                     RoundedRectangleBorder(
@@ -318,7 +318,7 @@ class _AddScheduleScreenState extends State<AddScheduleScreen> {
                         foregroundColor: MaterialStateProperty.all(white),
                         // add border color
                         side: MaterialStateProperty.all(
-                          BorderSide(width: 1, color: primary),
+                          const BorderSide(width: 1, color: primary),
                         ),
                         shape: MaterialStateProperty.all(
                           RoundedRectangleBorder(

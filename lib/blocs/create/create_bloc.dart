@@ -46,7 +46,6 @@ class CreateBloc extends Bloc<CreateEvent, CreateState> {
         try {
           emit(CreateLoading());
           await scheduleRepository.insertSchedule(event.schedule);
-          final data = await scheduleRepository.getSchedule();
           emit(CreateSuccess());
         } catch (e) {
           emit(CreateError(e.toString()));

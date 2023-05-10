@@ -1,7 +1,10 @@
-import 'package:app_fiman/models/transaction_model.dart';
+import 'package:app_fiman/models/resume_model.dart';
 import 'package:app_fiman/utils/constants/contant.dart';
+import 'package:intl/intl.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
+
+import '../../models/transaction_model.dart';
 
 class TransactionRepository {
   static TransactionRepository? _transactionRepository;
@@ -108,5 +111,28 @@ class TransactionRepository {
       whereArgs: [id],
     );
     return result;
+  }
+
+  Future<int> getTransactionSum() async {
+    final db = await database;
+    final pemasukan = Sqflite.firstIntValue(
+      await db.rawQuery(
+          'SELECT SUM(amount) FROM $_tableName where category = $pemasukanId'),
+    );
+    final pengeluaran = Sqflite.firstIntValue(
+      await db.rawQuery(
+          'SELECT SUM(amount) FROM $_tableName where category = $pengeluaranId'),
+    );
+
+    final result = (pemasukan ?? 0) - (pengeluaran ?? 0);
+    return result;
+  }
+
+  Future<List<ResumeModel>> getTransactionResumeThisMonth() async {
+    final db = await database;
+    final String param = DateFormat('yyyy-MM').format(DateTime.now());
+    final result = await db.rawQuery(
+        'SELECT SUM(CASE WHEN category = 1 THEN amount ELSE amount*-1 END) as sum, date FROM $_tableName where date LIKE "%$param%" GROUP BY date');
+    return result.map((e) => ResumeModel.fromMap(e)).toList();
   }
 }

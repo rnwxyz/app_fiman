@@ -1,5 +1,6 @@
 import 'package:app_fiman/blocs/create/create_bloc.dart';
 import 'package:app_fiman/blocs/history/history_bloc.dart';
+import 'package:app_fiman/blocs/resume/resume_bloc.dart';
 import 'package:app_fiman/models/transaction_model.dart';
 import 'package:app_fiman/utils/componen/text_field.dart';
 import 'package:app_fiman/utils/constants/contant.dart';
@@ -58,7 +59,7 @@ class _CreateScreenState extends State<CreateScreen> {
       if (kategoriController.text == '') {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text('Pilih kategori dulu bre !'),
+            content: Text('Pilih kategori terlebih dahulu !'),
           ),
         );
       } else {
@@ -78,6 +79,7 @@ class _CreateScreenState extends State<CreateScreen> {
         context
             .read<HistoryBloc>()
             .add(HistoryFetchEvent(loadMore: false, search: ""));
+        context.read<ResumeBloc>().add(ResumeFetch());
         Navigator.pop(context);
       }
     }
@@ -111,7 +113,7 @@ class _CreateScreenState extends State<CreateScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Text(
-                      'Lengkapin ya bre !',
+                      'Lengkapin data dengan baik dan benar !',
                       style: headline2,
                     ),
                     const SizedBox(height: 50),
@@ -129,7 +131,7 @@ class _CreateScreenState extends State<CreateScreen> {
                                       MaterialStateProperty.all(white),
                                   // add border color
                                   side: MaterialStateProperty.all(
-                                    BorderSide(color: success, width: 1),
+                                    const BorderSide(color: success, width: 1),
                                   ),
                                   shape: MaterialStateProperty.all(
                                     RoundedRectangleBorder(
@@ -157,7 +159,7 @@ class _CreateScreenState extends State<CreateScreen> {
                                       MaterialStateProperty.all(black),
                                   // add border color
                                   side: MaterialStateProperty.all(
-                                    BorderSide(color: accent, width: 1),
+                                    const BorderSide(color: accent, width: 1),
                                   ),
                                   shape: MaterialStateProperty.all(
                                     RoundedRectangleBorder(
@@ -190,7 +192,7 @@ class _CreateScreenState extends State<CreateScreen> {
                                       MaterialStateProperty.all(white),
                                   // add border color
                                   side: MaterialStateProperty.all(
-                                    BorderSide(color: danger, width: 1),
+                                    const BorderSide(color: danger, width: 1),
                                   ),
                                   shape: MaterialStateProperty.all(
                                     RoundedRectangleBorder(
@@ -218,7 +220,7 @@ class _CreateScreenState extends State<CreateScreen> {
                                       MaterialStateProperty.all(black),
                                   // add border color
                                   side: MaterialStateProperty.all(
-                                    BorderSide(color: accent, width: 1),
+                                    const BorderSide(color: accent, width: 1),
                                   ),
                                   shape: MaterialStateProperty.all(
                                     RoundedRectangleBorder(
@@ -281,7 +283,7 @@ class _CreateScreenState extends State<CreateScreen> {
                         foregroundColor: MaterialStateProperty.all(white),
                         // add border color
                         side: MaterialStateProperty.all(
-                          BorderSide(width: 1, color: primary),
+                          const BorderSide(width: 1, color: primary),
                         ),
                         shape: MaterialStateProperty.all(
                           RoundedRectangleBorder(

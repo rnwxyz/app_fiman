@@ -53,6 +53,8 @@ class MyTextField extends StatelessWidget {
       keyboardType: keyboardType,
       onTap: onTap,
       readOnly: isReadOnly,
+      maxLines: 3,
+      minLines: 1,
     );
   }
 }

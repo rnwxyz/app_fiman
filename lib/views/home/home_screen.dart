@@ -3,10 +3,13 @@ import 'package:app_fiman/views/auth/start_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../../blocs/auth/auth_bloc.dart';
 import '../../blocs/news/news_bloc.dart';
+import '../../blocs/resume/resume_bloc.dart';
 import '../../models/news_model.dart';
+import '../../models/resume_model.dart';
 import '../../utils/componen/navigation_bar.dart';
 import '../notification/notification_screen.dart';
 
@@ -34,6 +37,7 @@ class _HomeScreenState extends State<HomeScreen> {
         }
       },
     );
+    context.read<ResumeBloc>().add(ResumeFetch());
     context.read<NewsBloc>().add(NewsFetch(q: '', loadMore: false));
     super.initState();
   }
@@ -46,7 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               const SizedBox(height: 50),
               ListTile(
-                title: Text('Hallo', style: headline1),
+                title: const Text('Hallo', style: headline1),
                 trailing: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
@@ -109,20 +113,105 @@ class _HomeScreenState extends State<HomeScreen> {
                 width: double.infinity,
                 margin: const EdgeInsets.symmetric(horizontal: 10),
                 decoration: BoxDecoration(
-                  color: primary,
+                  color: secondary,
                   borderRadius: BorderRadius.circular(20),
                 ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text('resume',
-                        style: Theme.of(context).textTheme.headlineLarge),
-                  ],
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: 20),
+                      const Text('Total uang kamu sekarang', style: headline3),
+                      const SizedBox(height: 20),
+                      BlocBuilder<ResumeBloc, ResumeState>(
+                        builder: (context, state) {
+                          if (state is ResumeInitial) {
+                            return const CircularProgressIndicator();
+                          } else if (state is ResumeLoaded) {
+                            if (state.transactionSum < 0) {
+                              return Text(
+                                NumberFormat.currency(
+                                        locale: 'id', symbol: 'Rp.')
+                                    .format(state.transactionSum * -1),
+                                style: const TextStyle(
+                                  color: danger,
+                                  fontSize: 30,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              );
+                            } else {
+                              return Text(
+                                NumberFormat.currency(
+                                        locale: 'id', symbol: 'Rp.')
+                                    .format(state.transactionSum),
+                                style: const TextStyle(
+                                  color: success,
+                                  fontSize: 30,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              );
+                            }
+                          } else if (state is ResumeError) {
+                            return Text(state.message);
+                          } else {
+                            return const CircularProgressIndicator();
+                          }
+                        },
+                      ),
+                      SizedBox(
+                        height: 180,
+                        child: BlocConsumer<ResumeBloc, ResumeState>(
+                          listener: (context, state) {},
+                          builder: (context, state) {
+                            if (state is ResumeLoading) {
+                              return const Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            } else if (state is ResumeLoaded) {
+                              final data = state.data;
+                              return SfCartesianChart(
+                                primaryXAxis: CategoryAxis(),
+                                tooltipBehavior: TooltipBehavior(enable: true),
+                                series: <ChartSeries<ResumeModel, String>>[
+                                  ColumnSeries<ResumeModel, String>(
+                                    dataSource: data,
+                                    xValueMapper: (ResumeModel resume, _) =>
+                                        resume.day.toString(),
+                                    yValueMapper: (ResumeModel resume, _) =>
+                                        resume.transactionSum,
+                                    dataLabelSettings: const DataLabelSettings(
+                                        isVisible: true,
+                                        textStyle: TextStyle(
+                                            color: black, fontSize: 10)),
+                                    gradient: const LinearGradient(
+                                      colors: <Color>[
+                                        Color.fromRGBO(0, 170, 255, 1),
+                                        Color.fromRGBO(0, 170, 255, 0.5),
+                                      ],
+                                      stops: <double>[0.1, 0.7],
+                                    ),
+                                  ),
+                                ],
+                              );
+                            } else if (state is ResumeError) {
+                              return Center(
+                                child: Text(state.message),
+                              );
+                            } else {
+                              return const SizedBox();
+                            }
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
               const SizedBox(height: 20),
               Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20),
+                padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Align(
                   alignment: Alignment.centerLeft,
                   child: Row(
@@ -194,7 +283,8 @@ class _HomeScreenState extends State<HomeScreen> {
                               final String author = news[index].author;
                               final String imgUrl = news[index].urlToImage;
                               final String url = news[index].url;
-                              Widget image = Icon(Icons.image_not_supported);
+                              Widget image =
+                                  const Icon(Icons.image_not_supported);
 
                               if (imgUrl != '') {
                                 image = Image.network(

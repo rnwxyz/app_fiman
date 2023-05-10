@@ -1,4 +1,3 @@
-import 'package:app_fiman/utils/constants/contant.dart';
 import 'package:app_fiman/utils/constants/urls.dart';
 import 'package:dio/dio.dart';
 
@@ -32,27 +31,18 @@ class NewsApi {
     required String apiKey,
   }) async {
     try {
-      // final response = await _dio.get(
-      //   _urls,
-      //   queryParameters: {
-      //     'apiKey': apiKey,
-      //     'pageSize': 10,
-      //     'page': page,
-      //     'q': q,
-      //   },
-      // );
-      // final data = List<NewsModel>.from(response.data["articles"].map(
-      //   (e) => NewsModel.fromJson(e),
-      // ));
-      final List<NewsModel> data = [
-        NewsModel(
-          author: "author",
-          title: "title",
-          publishedAt: DateTime.now(),
-          urlToImage: '',
-          url: 'https://www.google.com',
-        )
-      ];
+      final response = await _dio.get(
+        _urls,
+        queryParameters: {
+          'apiKey': apiKey,
+          'pageSize': 10,
+          'page': page,
+          'q': q,
+        },
+      );
+      final data = List<NewsModel>.from(response.data["articles"].map(
+        (e) => NewsModel.fromJson(e),
+      ));
       return data;
     } catch (e) {
       rethrow;
