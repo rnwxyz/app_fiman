@@ -455,27 +455,14 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                                 transactionData[index].amount),
                                     style: const TextStyle(fontSize: 17),
                                   ),
-                                  trailing: Row(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      IconButton(
-                                        icon: const Icon(
-                                          Icons.edit,
-                                          color: primary,
-                                          size: 20,
-                                        ),
-                                        onPressed: () {},
-                                      ),
-                                      IconButton(
-                                        icon: const Icon(
-                                          Icons.delete,
-                                          color: primary,
-                                          size: 25,
-                                        ),
-                                        onPressed: () => _delete(
-                                            transactionData[index].id ?? 0),
-                                      ),
-                                    ],
+                                  trailing: IconButton(
+                                    icon: const Icon(
+                                      Icons.delete,
+                                      color: primary,
+                                      size: 25,
+                                    ),
+                                    onPressed: () =>
+                                        _delete(transactionData[index].id ?? 0),
                                   ),
                                 ),
                               );

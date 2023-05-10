@@ -75,3 +75,4 @@ const button2 = TextStyle(
 // const
 const pemasukanId = 1;
 const pengeluaranId = 2;
+const newsApiKey = '9f0a37c0840f47b98b1d4d1639886bcf';
