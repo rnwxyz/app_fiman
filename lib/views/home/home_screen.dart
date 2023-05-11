@@ -206,28 +206,27 @@ class _HomeScreenState extends State<HomeScreen> {
                                         text: DateFormat('MMMM yyyy', 'id_ID')
                                             .format(DateTime.now())),
                                     primaryXAxis: CategoryAxis(),
+                                    primaryYAxis: NumericAxis(
+                                        numberFormat:
+                                            NumberFormat.compactCurrency(
+                                                locale: 'id', symbol: 'Rp.')),
                                     tooltipBehavior:
                                         TooltipBehavior(enable: true),
                                     series: <ChartSeries<ResumeModel, String>>[
-                                      LineSeries<ResumeModel, String>(
+                                      StackedLineSeries<ResumeModel, String>(
+                                        markerSettings: const MarkerSettings(
+                                            isVisible: true),
                                         dataSource: data,
                                         xValueMapper: (ResumeModel resume, _) =>
-                                            resume.day.toString(),
+                                            resume.day,
                                         yValueMapper: (ResumeModel resume, _) =>
                                             resume.transactionSum,
                                         dataLabelSettings:
                                             const DataLabelSettings(
-                                                isVisible: true,
-                                                textStyle: TextStyle(
-                                                    color: black,
-                                                    fontSize: 10)),
-                                        // gradient: const LinearGradient(
-                                        //   colors: <Color>[
-                                        //     Color.fromRGBO(0, 170, 255, 1),
-                                        //     Color.fromRGBO(0, 170, 255, 0.5),
-                                        //   ],
-                                        //   stops: <double>[0.1, 0.7],
-                                        // ),
+                                          isVisible: true,
+                                          textStyle: TextStyle(
+                                              color: black, fontSize: 10),
+                                        ),
                                       ),
                                     ],
                                   );
