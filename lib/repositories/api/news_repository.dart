@@ -31,15 +31,12 @@ class NewsApi {
     required String apiKey,
   }) async {
     try {
-      final response = await _dio.get(
-        _urls,
-        queryParameters: {
-          'apiKey': apiKey,
-          'pageSize': 10,
-          'page': page,
-          'q': q,
-        },
-      );
+      final response = await _dio.get(_urls, queryParameters: {
+        'apiKey': apiKey,
+        'pageSize': 10,
+        'page': page,
+        'q': q,
+      });
       final data = List<NewsModel>.from(response.data["articles"].map(
         (e) => NewsModel.fromJson(e),
       ));

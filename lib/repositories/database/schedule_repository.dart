@@ -17,7 +17,7 @@ class ScheduleRepository {
   Future<Database> get database async {
     _database = await _initializeDb();
     return _database;
-  }
+  } // satu koneksi
 
   final String _tableName = 'schedules';
 
