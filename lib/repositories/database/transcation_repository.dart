@@ -27,18 +27,6 @@ class TransactionRepository {
   Future<Database> _initializeDb() async {
     var db = openDatabase(
       join(await getDatabasesPath(), 'myapp_db.db'),
-      onCreate: (db, version) async {
-        await db.execute(
-          '''CREATE TABLE $_tableName(
-            id INTEGER PRIMARY KEY,
-            name TEXT,
-            category INTEGER,
-            amount INTEGER,
-            date DATE,
-            description TEXT
-        )''',
-        );
-      },
       version: 1,
     );
     return db;

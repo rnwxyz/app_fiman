@@ -1,6 +1,7 @@
 import 'package:app_fiman/blocs/auth/auth_bloc.dart';
 import 'package:app_fiman/blocs/create/create_bloc.dart';
 import 'package:app_fiman/blocs/history/history_bloc.dart';
+import 'package:app_fiman/repositories/database/migration_repository.dart';
 import 'package:app_fiman/views/auth/start_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,12 +18,16 @@ import 'blocs/schedule/schedule_bloc.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await Future.delayed(const Duration(seconds: 3));
+  await Future.delayed(const Duration(seconds: 1));
   FlutterNativeSplash.remove();
 
   await initializeDateFormatting('id_ID', null).then(
     (_) => runApp(const MyApp()),
   );
+
+  // initial database
+  final migration = MigrationRepository();
+  await migration.createDatabase();
 }
 
 class MyApp extends StatelessWidget {

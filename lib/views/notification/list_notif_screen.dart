@@ -116,6 +116,7 @@ class _ListNotifScreenState extends State<ListNotifScreen> {
         } else if (state is NotificationLoaded) {
           final schedules = state.schedules;
           return ListView.builder(
+            padding: const EdgeInsets.only(left: 8, right: 8, top: 8),
             itemCount: schedules.length,
             itemBuilder: (context, index) {
               final Icon leading;
@@ -136,7 +137,7 @@ class _ListNotifScreenState extends State<ListNotifScreen> {
 
               return Card(
                 shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(50),
+                  borderRadius: BorderRadius.circular(10),
                 ),
                 child: Padding(
                   padding: const EdgeInsets.all(8),

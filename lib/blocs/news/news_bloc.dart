@@ -27,7 +27,7 @@ class NewsBloc extends Bloc<NewsEvent, NewsState> {
           }
           final List<NewsModel> news = await newsApi.getNews(
             page: page,
-            q: event.q == '' ? 'finance' : event.q,
+            q: event.q == '' ? 'bitcoin' : event.q,
             apiKey: newsApiKey,
           );
 

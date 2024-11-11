@@ -9,3 +9,4 @@ class NotificationRead extends NotificationEvent {
 
   NotificationRead(this.id);
 }
+

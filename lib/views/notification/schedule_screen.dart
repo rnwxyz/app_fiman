@@ -89,6 +89,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
         } else if (state is ScheduleLoaded) {
           final schedules = state.schedules;
           return ListView.builder(
+            padding: const EdgeInsets.only(left: 8, right: 8, top: 8),
             itemCount: schedules.length,
             itemBuilder: (context, index) {
               final year = schedules[index].year;
@@ -140,9 +141,7 @@ class _ScheduleScreenState extends State<ScheduleScreen> {
                         ),
                         const SizedBox(height: 5),
                         Text(
-                          date == 'hari'
-                              ? 'Setiap $date'
-                              : 'Setiap Tanggal $date',
+                          date == 'hari' ? 'Setiap hari' : 'Tanggal $date',
                           style: headline3,
                         ),
                         const SizedBox(height: 5),

@@ -384,14 +384,14 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                           : danger,
                                     ),
                                     child: Padding(
-                                      padding: const EdgeInsets.all(5),
+                                      padding: const EdgeInsets.all(4),
                                       child: Column(
                                         children: [
                                           Text(
                                             DateFormat('dd', 'id_ID').format(
                                                 transactionData[index].date),
                                             style: const TextStyle(
-                                              fontSize: 20,
+                                              fontSize: 13,
                                               fontWeight: FontWeight.w700,
                                               color: white,
                                             ),
@@ -400,7 +400,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                             DateFormat('MMM', 'id_ID').format(
                                                 transactionData[index].date),
                                             style: const TextStyle(
-                                              fontSize: 14,
+                                              fontSize: 12,
                                               fontWeight: FontWeight.w700,
                                               color: secondary,
                                             ),

@@ -144,7 +144,7 @@ class _DetailHistoryScreenState extends State<DetailHistoryScreen> {
                                       fontWeight: FontWeight.w300,
                                       color: black),
                                 ),
-                                const SizedBox(height: 50),
+                                const SizedBox(height: 10),
                                 const Text('KETERANGAN', style: button2),
                                 const SizedBox(height: 20),
                                 TextFormField(

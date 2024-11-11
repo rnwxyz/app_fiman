@@ -1,7 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.app_fiman">
+        <!-- Izin akses internet -->
+    <uses-permission android:name="android.permission.INTERNET" />
    <application
-        android:label="app_fiman"
+        android:label="Fiman"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
